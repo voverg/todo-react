@@ -12,18 +12,23 @@ export default class App extends React.Component {
 
   state = {
     todoData: [
-      {label: 'first item', important: false, id: 1},
-      {label: 'second item', important: false, id: 2},
-      {label: 'third item', important: false, id: 3}
+      this.createTodoItem('first fucking item'),
+      this.createTodoItem('second fucking item'),
+      this.createTodoItem('third fucking item')
     ]
   };
 
-  addItem = (text) => {
-    const newItem = {
-      label: `${text}`,
+  createTodoItem(label) {
+    return {
+      label,
       important: false,
+      done: false,
       id: this.maxId++
     };
+  }
+
+  addItem = (text) => {
+    const newItem = this.createTodoItem(text);
 
     this.setState(({todoData}) => {
       const newArray = [...todoData, newItem];
@@ -48,12 +53,43 @@ export default class App extends React.Component {
     });
   };
 
+  toggleProperty(arr, id, propName) {
+    const index = arr.findIndex((el) => el.id === id);
+
+    const oldItem = arr[index];
+    const newItem = {...oldItem, [propName]: !oldItem[propName]};
+
+    const before = arr.slice(0, index);
+    const after = arr.slice(index + 1);
+
+    return [...before, newItem, ...after];
+  }
+
+  toggleImportant = (id) => {
+    this.setState(({todoData}) => {
+      return {
+        todoData: this.toggleProperty(todoData, id, 'important')
+      };
+    });
+  };
+
+  toggleDone = (id) => {
+    this.setState(({todoData}) => {
+      return {
+        todoData: this.toggleProperty(todoData, id, 'done')
+      };
+    });
+  };
+
   render() {
     const {todoData} = this.state;
 
+    const doneCount = todoData.filter((el) => el.done).length;
+    const todoCount = todoData.length - doneCount;
+
     return (
       <div className="todo-app">
-        <AppHeader toDo={1} done={3} />
+        <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel">
           <SearchPanel />
           <ItemStatusFilter />
@@ -61,7 +97,9 @@ export default class App extends React.Component {
 
         <TodoList
           todos={todoData}
-          onDeleted={this.deleteItem} />
+          onDeleted={this.deleteItem}
+          onToggleImportant={this.toggleImportant}
+          onToggleDone={this.toggleDone} />
 
         <ItemAddForm onItemAdd={() => this.addItem('zhopa')} />
       </div>
