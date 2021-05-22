@@ -3,17 +3,44 @@ import React from 'react';
 import './item-add-form.css';
 
 export default class ItemAddForm extends React.Component {
-  render() {
-    const {onItemAdd} = this.props;
+  state = {
+    label: ''
+  };
 
+  labelChange = (event) => {
+    this.setState(({label}) => {
+      return {
+        label: event.target.value
+      };
+    });
+  };
+
+  submitLabel = (event) => {
+    event.preventDefault();
+    this.props.onItemAdd(this.state.label);
+    this.setState(({label}) => {
+      return {
+        label: ''
+      };
+    });
+  }
+
+  render() {
     return (
-      <div className="item-add-form">
+      <form className="item-add-form" onSubmit={this.submitLabel}>
+        <input type="text"
+                className="form-control new-task"
+                onChange={this.labelChange}
+                placeholder="New task..."
+                value={this.state.label}
+                autoFocus
+         />
         <button type="button"
-          className="btn btn-outline-secondary"
-          onClick={onItemAdd}>
+                className="btn btn-outline-secondary add-btn"
+        >
             Add item
         </button>
-      </div>
+      </form>
     );
   }
 }

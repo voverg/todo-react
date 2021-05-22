@@ -2,4 +2,15 @@
   position: absulute;
   left: 10px;
   bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.new-task {
+  flex-basis: 80%;
+  margin-right: 5px;
+}
+
+.add-btn {
+  flex-grow: 1;
 }

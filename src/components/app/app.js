@@ -101,7 +101,7 @@ export default class App extends React.Component {
           onToggleImportant={this.toggleImportant}
           onToggleDone={this.toggleDone} />
 
-        <ItemAddForm onItemAdd={() => this.addItem('zhopa')} />
+        <ItemAddForm onItemAdd={(text) => this.addItem(text)} />
       </div>
     );
   }

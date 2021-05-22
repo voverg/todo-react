@@ -4,7 +4,10 @@ import './search-panel.css';
 
 const SearchPanel = () => {
     return (
-        <input type="text" className="search-panel" placeholder="Type to search..." />
+        <input type="text"
+               className="search-panel"
+               placeholder="Type to search..."
+        />
     );
 };
 
