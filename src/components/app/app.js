@@ -15,10 +15,11 @@ export default class App extends React.Component {
       this.createTodoItem('first fucking item'),
       this.createTodoItem('second fucking item'),
       this.createTodoItem('third fucking item')
-    ]
+    ],
+    searchFilter: ''
   };
 
-  createTodoItem(label) {
+    createTodoItem(label) {
     return {
       label,
       important: false,
@@ -81,22 +82,43 @@ export default class App extends React.Component {
     });
   };
 
+   search = (arr, text) => {
+    if (text.trim() === '') {
+      return arr;
+    }
+
+    const filterResult = arr.filter((item) => {
+      return item.label.toLowerCase().includes(text.toLowerCase());
+    });
+
+    return filterResult;
+  }
+
+  searchChange = (text) => {
+    this.setState(({searchFilter}) => {
+      return {
+        searchFilter: text
+      };
+    });
+  };
+
   render() {
-    const {todoData} = this.state;
+    const {todoData, searchFilter} = this.state;
 
     const doneCount = todoData.filter((el) => el.done).length;
     const todoCount = todoData.length - doneCount;
+    const visibleItems = this.search(todoData, searchFilter);
 
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel">
-          <SearchPanel />
+          <SearchPanel onSearch={(text) => this.searchChange(text)} />
           <ItemStatusFilter />
         </div>
 
         <TodoList
-          todos={todoData}
+          todos={visibleItems}
           onDeleted={this.deleteItem}
           onToggleImportant={this.toggleImportant}
           onToggleDone={this.toggleDone} />
