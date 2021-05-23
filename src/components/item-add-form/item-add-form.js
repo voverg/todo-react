@@ -17,7 +17,9 @@ export default class ItemAddForm extends React.Component {
 
   submitLabel = (event) => {
     event.preventDefault();
-    this.props.onItemAdd(this.state.label);
+    if (this.state.label.trim() === '') return;
+
+    this.props.onItemAdd(this.state.label.trim());
     this.setState(({label}) => {
       return {
         label: ''
@@ -35,7 +37,7 @@ export default class ItemAddForm extends React.Component {
                 value={this.state.label}
                 autoFocus
          />
-        <button type="button"
+        <button type="submit"
                 className="btn btn-outline-secondary add-btn"
         >
             Add item

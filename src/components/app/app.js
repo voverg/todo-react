@@ -8,18 +8,21 @@ import ItemAddForm from '../item-add-form';
 import './app.css';
 
 export default class App extends React.Component {
+  // Create max id for items
   maxId = 100;
 
+  // Initial state
   state = {
     todoData: [
       this.createTodoItem('first fucking item'),
       this.createTodoItem('second fucking item'),
       this.createTodoItem('third fucking item')
     ],
-    searchFilter: ''
+    searchFilter: '',
+    filter: 'all'
   };
 
-    createTodoItem(label) {
+  createTodoItem(label) {
     return {
       label,
       important: false,
@@ -82,13 +85,16 @@ export default class App extends React.Component {
     });
   };
 
+// Search functions
    search = (arr, text) => {
     if (text.trim() === '') {
       return arr;
     }
 
     const filterResult = arr.filter((item) => {
-      return item.label.toLowerCase().includes(text.toLowerCase());
+      return item.label
+        .toLowerCase()
+        .includes(text.toLowerCase());
     });
 
     return filterResult;
@@ -102,19 +108,45 @@ export default class App extends React.Component {
     });
   };
 
+  // Filter functions
+  filterSwitch(arr, filterValue) {
+    switch(filterValue) {
+      case 'all':
+        return arr;
+      case 'active':
+        return arr.filter((item) => !item.done);
+      case 'done':
+        return arr.filter((item) => item.done);
+      default:
+        return arr;
+    }
+  }
+
+  filterChange = (filterVal) => {
+    this.setState(({filter}) => {
+      return {
+        filter: filterVal
+      };
+    });
+  };
+
+
   render() {
-    const {todoData, searchFilter} = this.state;
+    const {todoData, searchFilter, filter} = this.state;
 
     const doneCount = todoData.filter((el) => el.done).length;
     const todoCount = todoData.length - doneCount;
-    const visibleItems = this.search(todoData, searchFilter);
+    const visibleItems = this.filterSwitch(this.search(todoData, searchFilter), filter);
 
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel">
-          <SearchPanel onSearch={(text) => this.searchChange(text)} />
-          <ItemStatusFilter />
+          <SearchPanel onSearch={this.searchChange} />
+          <ItemStatusFilter
+            filter={filter}
+            onFilter={this.filterChange}
+          />
         </div>
 
         <TodoList
@@ -123,7 +155,7 @@ export default class App extends React.Component {
           onToggleImportant={this.toggleImportant}
           onToggleDone={this.toggleDone} />
 
-        <ItemAddForm onItemAdd={(text) => this.addItem(text)} />
+        <ItemAddForm onItemAdd={this.addItem} />
       </div>
     );
   }
