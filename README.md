@@ -1,7 +1,10 @@
-To-Do App.
+# To-Do App.
+This is a simple to-do app created by React. You can see this app demo on Github Pages by [this link](https://voverg.github.io/todo-react/)
+
+![todo-react](./src/assets/todo-react-social.png)
 ------------
 
-# Getting Started with Create React App
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
