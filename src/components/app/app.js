@@ -13,14 +13,28 @@ export default class App extends React.Component {
 
   // Initial state
   state = {
-    todoData: [
-      this.createTodoItem('first fucking item'),
-      this.createTodoItem('second fucking item'),
-      this.createTodoItem('third fucking item')
-    ],
+    todoData: this.getDataFromLocalStorage(),
     searchFilter: '',
     filter: 'all'
   };
+
+  // Get data from Local Storage
+  getDataFromLocalStorage() {
+    const data = localStorage.getItem('taskList');
+    if (data) {
+      const taskList = JSON.parse(data);
+      this.maxId = taskList.length;
+
+      return taskList;
+    } else {
+      return [];
+    }
+  }
+
+  // Set data to localStorage
+  setDataToLocalStorage() {
+    localStorage.setItem('taskList', JSON.stringify(this.state.todoData));
+  }
 
   createTodoItem(label) {
     return {
@@ -101,11 +115,7 @@ export default class App extends React.Component {
   }
 
   searchChange = (text) => {
-    this.setState(({searchFilter}) => {
-      return {
-        searchFilter: text
-      };
-    });
+    this.setState({searchFilter: text});
   };
 
   // Filter functions
@@ -130,6 +140,11 @@ export default class App extends React.Component {
     });
   };
 
+  componentDidUpdate(prevState) {
+    if (this.state.todoData !== prevState.todoData) {
+      this.setDataToLocalStorage();
+    }
+  }
 
   render() {
     const {todoData, searchFilter, filter} = this.state;
