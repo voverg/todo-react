@@ -13,10 +13,15 @@ export default class App extends React.Component {
 
   // Initial state
   state = {
-    todoData: this.getDataFromLocalStorage(),
+    todoData: [],
     searchFilter: '',
     filter: 'all'
   };
+
+  componentDidMount() {
+    const data = this.getDataFromLocalStorage();
+    this.setState({todoData: data});
+  }
 
   // Get data from Local Storage
   getDataFromLocalStorage() {
