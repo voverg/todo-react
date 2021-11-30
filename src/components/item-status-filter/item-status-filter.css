@@ -1,0 +1,6 @@
+
+@media (max-width: 460px) {
+  .item-status-filter {
+    flex-grow: 1;
+  }
+}

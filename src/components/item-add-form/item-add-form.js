@@ -40,7 +40,7 @@ export default class ItemAddForm extends React.Component {
         <button type="submit"
                 className="btn btn-outline-secondary add-btn"
         >
-            Add item
+            Add
         </button>
       </form>
     );
